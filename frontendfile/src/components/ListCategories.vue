@@ -1,0 +1,96 @@
+<template>
+    <div class="categories-list">
+      <h2 class="text-center mt-4">List of Categories</h2>
+  
+      <!-- Display Categories -->
+      <div v-if="categories.length > 0">
+        <ul class="category-ul">
+          <li v-for="category in categories" :key="category.categoryid" class="category-item">
+            {{ category.categoryname }}
+          </li>
+        </ul>
+      </div>
+  
+      <!-- Display a message when no categories are found -->
+      <div v-if="categories.length === 0" class="no-categories">
+        <p>No categories found.</p>
+      </div>
+    </div>
+  </template>
+  
+  <script>
+  import axios from 'axios'
+  export default {
+    data() {
+      return {
+        categories: [],
+         // Initialize categories as an empty array
+      };
+    },
+    created() {
+      // Fetch the list of categories from the Flask API when the component is created
+      this.fetchCategories();
+    },
+    methods: {
+      fetchCategories() {
+        // Make a GET request to the Flask API to fetch the list of categories
+        axios.get('http://127.0.0.1:5000/listcategories',{
+            mode: 'cors',
+            
+          })
+          .then((response) => {
+            if (response.data && response.data.categories) {
+              this.categories = response.data.categories;
+            } else {
+              // Handle empty or invalid response data here
+            }
+          })
+          .catch((error) => {
+            console.error('Error fetching categories:', error);
+          });
+      },
+    },
+  };
+  </script>
+  
+  <style scoped>
+  /* Custom styles for the categories list with blue and white theme */
+  .categories-list {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff; /* White background */
+    font-family: 'Arial', sans-serif; /* Specify your preferred font-family */
+  }
+  
+  .category-ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .category-item {
+    background-color: #3498db; /* Blue background */
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    color: #ffffff; /* White text color */
+    font-size: 16px; /* Specify your preferred font size */
+    font-weight: bold; /* Bold font weight */
+    text-align: center; /* Center text */
+  }
+  
+  .category-item:hover {
+    background-color: #2980b9; /* Darker blue on hover */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+  }
+  
+  .no-categories {
+    margin-top: 20px;
+    text-align: center;
+    color: #888;
+    font-style: italic; /* Specify your preferred font style */
+  }
+  </style>
+  

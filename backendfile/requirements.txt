@@ -1,0 +1,8 @@
+Flask==2.0.1
+Flask-SQLAlchemy==2.5.1
+flask-restful
+vue==2.4.2
+celery
+redis
+flask_jwt_extended
+Cache
